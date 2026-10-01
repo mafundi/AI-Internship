@@ -1,16 +1,14 @@
 """Week 1 live demo — five stages in one file, built up live in class."""
 
 import time
-from pathlib import Path
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from fastapi import FastAPI, HTTPException
 from openai import OpenAI
 from pydantic import BaseModel, Field, ValidationError
 
-# Load .env from this folder so the key is found regardless of shell working directory.
-_ENV_PATH = Path(__file__).resolve().parent / ".env"
-load_dotenv(_ENV_PATH)
+# Load .env from this folder, or walk up to the repo root if that is where it lives.
+load_dotenv(find_dotenv())
 
 # Reuse one client so TLS handshakes are not repeated on every request.
 app = FastAPI()

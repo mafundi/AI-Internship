@@ -19,10 +19,17 @@ def free_port() -> int:
         return sock.getsockname()[1]
 
 
+def uvicorn_bin() -> Path:
+    # Windows venv puts executables in Scripts/; macOS/Linux use bin/.
+    scripts = WORKDIR / ".venv" / "Scripts" / "uvicorn.exe"
+    unix = WORKDIR / ".venv" / "bin" / "uvicorn"
+    return scripts if scripts.exists() else unix
+
+
 def start_server(module: str, port: int) -> subprocess.Popen:
     return subprocess.Popen(
         [
-            str(WORKDIR / ".venv/bin/uvicorn"),
+            str(uvicorn_bin()),
             f"{module}:app",
             "--host",
             "127.0.0.1",
